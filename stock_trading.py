@@ -8,6 +8,7 @@
 import urllib2
 import xlrd
 import re
+import logging
 from datetime import datetime
 #from pychartdir import *
 #from FinanceChart import *
@@ -143,15 +144,18 @@ def pick_stock(stockid):
   else:
     thirty_avg_vol = sum(vol[:30])/30
     if drop_for_days(5, close[:5]):
-      print stockid, "going down for 5 days, @%s"%date[0]
+      %print stockid, "going down for 5 days, @%s"%date[0]
+      logging.info("%s going down for 5 days, @%s"%(stockid, date[0]))
     #elif up_for_days(3, close) and up_for_days(3, vol):
     #  print stockid, "going up"
     if vol[0] / thirty_avg_vol > 4:
       if close[0] > close[1]:
-        print stockid, 'rising with large volume, @%s'%date[0]
+        #print stockid, 'rising with large volume, @%s'%date[0]
+        logging.info('%s rising with large volume, @%s'%(stockid, date[0]))
     elif vol[-1] and thirty_avg_vol / vol[-1] > 5:
       if close[0] < close[1]*0.9:
-        print stockid, 'declining with small valume, @%s'%date[0]
+        #print stockid, 'declining with small valume, @%s'%date[0]
+        logging.info('%s declining with small valume, @%s'%(stockid, date[0]))
     else:
       #print 'average stock: ', stockid
       pass
@@ -207,7 +211,14 @@ def get_google_fin_data(stock):
   volume = []
   gf = GooGleFinance(stock)
   p = GfHTMLParser()
-  p.feed(gf.fetch())
+
+  while True:
+    try:
+      p.feed(gf.fetch())
+      break
+    except:
+      pass
+
   raw_data = p.get()
   if raw_data:
     raw_data = raw_data[6:]
@@ -330,6 +341,7 @@ if __name__ != '__main__':
   c.makeChart(stockid+".png")
 
 else:
+  logging.basicConfig(filename='stocks.log', format='%(asctime)s %(message)s', level=logging.DEBUG)
   table = xlrd.open_workbook('astocks.xls').sheets()[0]
   nrows, ncols = table.nrows, table.ncols
   p = re.compile('\d+')
