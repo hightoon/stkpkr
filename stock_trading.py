@@ -1,3 +1,4 @@
+#/usr/bin/python
 """
   Stock Analysis
   Trading data format:
@@ -148,11 +149,11 @@ def pick_stock(stockid):
       logging.info("%s going down for 5 days, @%s"%(stockid, date[0]))
     #elif up_for_days(3, close) and up_for_days(3, vol):
     #  print stockid, "going up"
-    if vol[0] / thirty_avg_vol > 5:
+    if vol[0] / thirty_avg_vol > 3:
       if close[0] > close[1] and close[0] == high[0]:
         #print stockid, 'rising with large volume, @%s'%date[0]
         logging.info('%s rising with large volume, @%s'%(stockid, date[0]))
-    elif vol[-1] and thirty_avg_vol / vol[-1] > 5:
+    elif vol[-1] and thirty_avg_vol / vol[-1] > 4:
       if close[0] < close[1]*0.9:
         #print stockid, 'declining with small valume, @%s'%date[0]
         logging.info('%s declining with small valume, @%s'%(stockid, date[0]))
