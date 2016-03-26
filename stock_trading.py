@@ -169,8 +169,8 @@ def pick_stock(stockid):
   if len(close)<4:
     print 'empty'
   else:
-    thirty_avg_vol = sum(vol[1:11])/10
-    if drop_for_days(5, close[:5]):
+    thirty_avg_vol = sum(vol[1:6])/5
+    if drop_for_days(6, close[:6]):
       #print stockid, "going down for 5 days, @%s"%date[0]
       logging.info("%s going down for 5 days, @%s"%(stockid, date[0]))
     #elif up_for_days(3, close) and up_for_days(3, vol):
